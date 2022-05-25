@@ -1,5 +1,5 @@
 import pandas as pd
-from numpy import zeros, where, argmax, int8
+from numpy import zeros, where, argmax, int8, isnan
 from collections import Counter
 
 from cf_api.utils.utils import calculate_similarity_parallel
@@ -20,7 +20,10 @@ class Recommendation:
         # convert pandas df to numpy array
         data_matrix = self.data.to_numpy(dtype=int8)
 
-
+        print("current_cart ==> ", type(current_cart[0]))
+        print("data_matrix ==> ", type(data_matrix[0][0]))
+        print(isnan(current_cart).any())
+        print(isnan(data_matrix[0]).any())
         # store scores (dtype is np.float32)
         scores = calculate_similarity_parallel(
             multiple_item=data_matrix,

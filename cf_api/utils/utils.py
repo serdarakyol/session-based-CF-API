@@ -1,23 +1,26 @@
-#from numba import jit, prange
-from numpy.linalg import norm
-from numpy import zeros, dot, float64
+from numba import njit, prange
+from numpy import zeros, float64, int32, sqrt
 
-#@jit(nopython=True)
+@njit('float64(int8[::1], int8[::1])')
 def cosine_similarity(a,b):
-    dt = dot(a,b)
-    if(abs(dt)<=1e-10):
-        return 0
-    else:
-        return dt/norm(a)/norm(b)
+    # Large safe integer type (int16 is less safe but certainly faster)
+    dt = int32(0)
+    for i in range(a.size):
+        dt += a[i] & b[i]
     
-#@jit(nopython=True, parallel=True)
+    if dt == 0:
+        return 0.0
+
+    sa, sb = int32(0), int32(0)
+    for i in range(a.size):
+        sa += a[i]
+        sb += b[i]
+    return dt / sqrt(sa * sb)
+
+@njit('float64[:](int8[:,::1], int8[::1])', parallel=True)
 def calculate_similarity_parallel(multiple_item, single_item):
     n = multiple_item.shape[0]
-    scores = zeros(shape=(n), dtype=float64)
-    for i in range(n):
-        scores[i] = cosine_similarity(a=single_item, b=multiple_item[i])
+    scores = zeros(n, float64)
+    for i in prange(n):
+        scores[i] = cosine_similarity(single_item, multiple_item[i])
     return scores
-
-"""@jit(nopython=True)
-def add_item2list(items):
-    n = items."""
