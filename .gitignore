@@ -1,0 +1,12 @@
+cf_api/data
+.env
+.ipynb_checkpoints/
+Dockerfile
+data
+venv
+cf_api/__pycache__
+cf_api/api/routes/__pycache__
+cf_api/core/__pycache__
+cf_api/models/__pycache__
+cf_api/services/__pycache__
+cf_api/utils/__pycache__
