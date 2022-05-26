@@ -2,7 +2,7 @@ from numba import njit, prange
 from numpy import zeros, float64, int32, sqrt
 
 @njit('float64(int8[::1], int8[::1])')
-def cosine_similarity(a,b):
+def custom_cosine_similarity(a,b):
     # Large safe integer type (int16 is less safe but certainly faster)
     dt = int32(0)
     for i in range(a.size):
@@ -22,5 +22,5 @@ def calculate_similarity_parallel(multiple_item, single_item):
     n = multiple_item.shape[0]
     scores = zeros(n, float64)
     for i in prange(n):
-        scores[i] = cosine_similarity(single_item, multiple_item[i])
+        scores[i] = custom_cosine_similarity(single_item, multiple_item[i])
     return scores

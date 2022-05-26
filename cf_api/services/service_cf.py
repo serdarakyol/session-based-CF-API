@@ -1,11 +1,13 @@
-import pandas as pd
-from numpy import zeros, where, argmax, int8, isnan
+from pandas import DataFrame
+from numpy import zeros, where, argmax, int8
+from numpy.random import choice
+
 from collections import Counter
 
 from cf_api.utils.utils import calculate_similarity_parallel
 
 class Recommendation:
-    def __init__(self, data:pd.DataFrame) -> None:
+    def __init__(self, data:DataFrame) -> None:
         self.data = data
     
     def recommend(self, items:list, n_item:int):
@@ -14,43 +16,47 @@ class Recommendation:
         # create current cart
         current_cart = zeros(shape=column_len, dtype=int8)
         for item in items:
-            index = where(self.data.columns == item)
-            current_cart[index] = 1
+            indices = where(self.data.columns == item)
+            current_cart[indices] = 1
         
         # convert pandas df to numpy array
         data_matrix = self.data.to_numpy(dtype=int8)
 
-        print("current_cart ==> ", type(current_cart[0]))
-        print("data_matrix ==> ", type(data_matrix[0][0]))
-        print(isnan(current_cart).any())
-        print(isnan(data_matrix[0]).any())
-        # store scores (dtype is np.float32)
+        # store scores (dtype is np.float64)
         scores = calculate_similarity_parallel(
             multiple_item=data_matrix,
             single_item=current_cart
         )
-        # get recommendation
-        similar_sessions = []
-        while len(similar_sessions) < n_item:
+
+        # find the most n similar items
+        similar_items = []
+        while len(similar_items) < n_item:
             idx = argmax(scores)
             if current_cart != self.data.index.to_numpy():
-                temp = {
-                    "session_id": self.data.index[idx],
-                    "similarity": scores[idx],
-                    "items": []
-                }
                 # find which column has 1 value
                 item_indexes = where(self.data.iloc[idx].values == 1)
-                items = self.data.columns[item_indexes]
-                for item in items:
-                    temp["items"].append(item)
-                similar_sessions.append(temp)
+                similar_session_items = self.data.columns[item_indexes]
+
+                # store all of the products from similar sessions
+                for item in similar_session_items:
+                    similar_items.append(item) 
                 scores[idx] = 0
-                #i += 1
+
             else:
                 scores[idx] = 0
 
-        all_items = [item for ses in similar_sessions for item in ses["items"]]
-        likely_items = Counter(all_items).most_common(n_item)
-        print(likely_items)
-        return likely_items
+        # find frequency of similar item based onn similar sessions 
+        likely_items = Counter(similar_items).most_common(n_item)
+        del similar_items
+
+        # recommend if item not in cart
+        final_recommendations = []
+        for recommend_item in likely_items:
+            if recommend_item[0] not in items:
+                final_recommendations.append(recommend_item[0])
+        
+        # if there are not any similar item, randomly recommend
+        if len(final_recommendations) == 0:
+            final_recommendations = self.data.columns[choice(column_len, size=n_item, replace=False)].to_list()
+    
+        return final_recommendations
