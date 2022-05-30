@@ -14,8 +14,10 @@ async def post_recommend(
     request_data: CFRequest = None,
     ) -> CFResponse:
 
-    # load word2vec model
-    recommendation_service = Recommendation(data=request.app.state.data)
+    recommendation_service = Recommendation(
+        cf_matrix=request.app.state.cf_matrix, 
+        products_info=request.app.state.product_info
+    )
     # get similar top n item
     results = recommendation_service.recommend(items=request_data.item, n_item=request_data.n_item)
     return CFResponse(input_item=request_data.item, similar_items=results)

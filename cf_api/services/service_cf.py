@@ -1,5 +1,6 @@
 from pandas import DataFrame
-from numpy import zeros, where, argmax, int8
+from numpy import zeros, where, argmax, int8, empty
+from numpy.core.defchararray import find
 from numpy.random import choice
 
 from collections import Counter
@@ -7,20 +8,49 @@ from collections import Counter
 from cf_api.utils.utils import calculate_similarity_parallel
 
 class Recommendation:
-    def __init__(self, data:DataFrame) -> None:
-        self.data = data
-    
-    def recommend(self, items:list, n_item:int):
-        column_len:int = self.data.columns.shape[0]
+    def __init__(self, cf_matrix:DataFrame, products_info:list) -> None:
+        self.cf_matrix = cf_matrix
+        self.products_info = products_info
+
+    def find_products_by_id(self, recommended_product_ids:list):
+        """
+        Finds product information based via product id
+
+        Return: Recommended product information
+        """
+
+        # create empty array and store in same order
+        product_ids = empty(len(self.products_info), dtype='S18')
+        for index, id in enumerate(self.products_info):
+            product_ids[index] = id['productid']
+
+
+        for idx, rec_item in enumerate(recommended_product_ids):
+            # find string
+            is_in = find(product_ids.astype(str), rec_item) # if there is not string return -1 else 0
+            index = where(is_in == 0)[0][0]
+            # replace product and if all product info
+            recommended_product_ids[idx] = self.products_info[index]
+        
+        return recommended_product_ids
+
+    def recommend(self, items:list, n_item:int) -> list:
+        """
+        Recommends new products based on similar sessions
+
+        Return: Recommended product information
+        """
+        cf_products = self.cf_matrix.columns
+        cf_column_len:int = cf_products.shape[0]
 
         # create current cart
-        current_cart = zeros(shape=column_len, dtype=int8)
+        current_cart = zeros(shape=cf_column_len, dtype=int8)
         for item in items:
-            indices = where(self.data.columns == item)
+            indices = where(cf_products == item)
             current_cart[indices] = 1
         
         # convert pandas df to numpy array
-        data_matrix = self.data.to_numpy(dtype=int8)
+        data_matrix = self.cf_matrix.to_numpy(dtype=int8)
 
         # store scores (dtype is np.float64)
         scores = calculate_similarity_parallel(
@@ -30,12 +60,12 @@ class Recommendation:
 
         # find the most n similar items
         similar_items = []
-        while len(similar_items) < n_item:
+        while len(similar_items) <= n_item:
             idx = argmax(scores)
-            if current_cart != self.data.index.to_numpy():
-                # find which column has 1 value
-                item_indexes = where(self.data.iloc[idx].values == 1)
-                similar_session_items = self.data.columns[item_indexes]
+            if current_cart != self.cf_matrix.index.to_numpy():
+                # find similar sessions
+                item_indexes = where(self.cf_matrix.iloc[idx].values == 1)
+                similar_session_items = cf_products[item_indexes]
 
                 # store all of the products from similar sessions
                 for item in similar_session_items:
@@ -50,13 +80,16 @@ class Recommendation:
         del similar_items
 
         # recommend if item not in cart
-        final_recommendations = []
+        product_ids = []
         for recommend_item in likely_items:
             if recommend_item[0] not in items:
-                final_recommendations.append(recommend_item[0])
+                product_ids.append(recommend_item[0])
         
         # if there are not any similar item, randomly recommend
-        if len(final_recommendations) == 0:
-            final_recommendations = self.data.columns[choice(column_len, size=n_item, replace=False)].to_list()
-    
-        return final_recommendations
+        if len(product_ids) == 0:
+            product_ids = cf_products[choice(cf_column_len, size=n_item, replace=False)].to_list()
+
+        # find product details via product id
+        recommended_items = self.find_products_by_id(product_ids)
+
+        return recommended_items
