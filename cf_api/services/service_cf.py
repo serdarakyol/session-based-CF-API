@@ -69,7 +69,8 @@ class Recommendation:
 
                 # store all of the products from similar sessions
                 for item in similar_session_items:
-                    similar_items.append(item) 
+                    if item not in items:
+                        similar_items.append(item) 
                 scores[idx] = 0
 
             else:
