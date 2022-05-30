@@ -20,4 +20,7 @@ async def post_recommend(
     )
     # get similar top n item
     results = recommendation_service.recommend(items=request_data.item, n_item=request_data.n_item)
-    return CFResponse(input_item=request_data.item, similar_items=results)
+    input_data = recommendation_service.find_products_by_id(
+        recommended_product_ids=request_data.item
+    )
+    return CFResponse(input_item=input_data, similar_items=results)
