@@ -7,7 +7,7 @@ sys.path.append(dirname(ROOT_DIR))
 from cf_api.utils.utils import custom_cosine_similarity
 from sklearn.metrics.pairwise import cosine_similarity
 
-from numpy import append, zeros, int8
+from numpy import zeros, int8
 from numpy.random import choice
 from random import randint
 
