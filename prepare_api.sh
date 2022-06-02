@@ -18,7 +18,7 @@ current_folder="$(pwd)"
 data_folder=$current_folder"/cf_api/data"
 mkdir $data_folder
 # install files in data
-echo "Downloading collaborative filter data to $data_folder/all_data.pkl"
-gdown https://drive.google.com/uc?id=18KO3wmlaAy1yW9HjZ82GXSXTbD2g1AoQ -O $data_folder"/all_data.pkl"
+echo "Downloading collaborative filter data to $data_folder/cf_data.pkl"
+gdown https://drive.google.com/uc?id=1iB4UmDc8Bcc4OhLbMdb-7ZflhRRFSBae -O $data_folder"/cf_data.pkl"
 echo "Downloading products data to $data_folder/meta.json"
 gdown https://drive.google.com/uc?id=1tQezbs22O_-ZtzOhf6GUAs5noDPRdiFU -O $data_folder"/meta.json"

@@ -13,7 +13,7 @@ ROOT_DIR = str(Path(__file__).parent.parent)
 def start_app_handler(app: FastAPI) -> Callable:
     def startup() -> None:
         logger.info("Running app start handler.")
-        app.state.cf_matrix = read_pickle(ROOT_DIR + "/data/all_data.pkl")
+        app.state.cf_matrix = read_pickle(ROOT_DIR + "/data/cf_data.pkl")
         app.state.product_info = load_json(ROOT_DIR + "/data/meta.json")['meta']
     
     return startup
