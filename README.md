@@ -12,7 +12,7 @@ Number of API Request | Average latency (ms) | Lowest latency (ms) | Highest lat
 3000 | 45 | 38 | 83 | 3 | 3
 
 # Usage
-That project developed on Python 3.9. For run that repository, just run below code
+That project developed and tested on Python 3.9. For run that repository, just run below code
 ## Run on Terminal
 ```
 $ git clone https://github.com/serdarakyol/session-based-CF-API.git
@@ -29,6 +29,96 @@ If you do not want to run API like that. You can just use Docker as below code s
 $ docker image build -t cf_api:0.0.1 .
 $ docker run -dp 1234:1234 cf_api:0.0.1
 ```
+## Product information
+Here you can find randomly product ID and corresponding information regarding Turkish and English. Remember, API works with product ID. So as an input just write product ID
+
+Product 1
+```
+TR
+"productid" : "HBV00000SP6XD",
+"brand" : "Buffa",
+"category" : "Kahvaltılık ve Süt", 
+"subcategory" : "Peynir",
+"name" : "Buffa Burata 150 gr"
+
+EN
+"productid" : "HBV00000SP6XD",
+"brand" : "Buffa",
+"category" : "Breakfast and Milk", 
+"subcategory" : "Cheese",
+"name" : "Buffa Burata 150 gr"
+```
+
+Product 2
+```
+TR
+"productid" : "SGKZB70023",
+"brand" : "Sesu",
+"category" : "Sağlık ve Kozmetik",
+"subcategory" : "El, Yüz ve Vücut Bakımı",
+"name" : "Sesu El Ağdası 250Gr"
+
+EN
+"productid" : "SGKZB70023",
+"brand" : "Sesu",
+"category" : "Health and Cosmetic",
+"subcategory" : "Hand, Face and Body care",
+"name" : "Sesu Hand Wax 250Gr"
+```
+
+Product 3:
+```
+TR
+"productid" : "HBV00000CN4Q1",
+"brand" : "Fairy",
+"category" : "Ev Bakım ve Temizlik",
+"subcategory" : "Bulaşık Yıkama",
+"name" : "Fairy Hepsi Bir Arada 22 Yıkama Bulaşık Makinesi Deterjanı Kapsülü Limon Kokulu"
+
+EN
+"productid" : "HBV00000CN4Q1",
+"brand" : "Fairy",
+"category" : "Home Care and Cleaning",
+"subcategory" : "Washing dishes",
+"name" : "Fairy All in One 22 Washes Dishwasher Liquid Capsule Lemon Scented"
+```
+
+Product 4:
+```
+TR
+"productid" : "HBV00000OE7P5",
+"brand" : "Ak-Du",
+"category" : "Kahvaltılık ve Süt",
+"subcategory" : "Peynir",
+"name" : "Ak-Du İzmir Tulum Peyniri 250 gr"
+
+EN
+"productid" : "HBV00000OE7P5",
+"brand" : "Ak-Du",
+"category" : "Breakfast and Milk",
+"subcategory" : "Cheese",
+"name" : "Ak-Du İzmir Bryndza 250 gr"
+```
+
+Product 5:
+```
+TR
+"productid" : "HBV00000M9HYH",
+"brand" : "Le Petit Marseillais",
+"category" : "Kişisel Bakım",
+"subcategory" : "Duş Jelleri ve Sabunlar",
+"name" : "Le Petit Marseillais Duş Jeli Zeytin Ağacı&Ihlamur 650 ml"
+
+EN
+"productid" : "HBV00000M9HYH",
+"brand" : "Le Petit Marseillais",
+"category" : "Personal Care",
+"subcategory" : "Shower Gels and Soaps",
+"name" : "Le Petit Marseillais Shower Gel Olive Tree&Linden 650 ml"
+```
+
+For more just go to data **cf_api/data/meta.json**. If you do not have that data use ```prepare_api.sh``` and you will have all products on **cf_api/data/meta.json.**
+
 ## How to use API
 So far, setup completed. Follow description to use this API
 
