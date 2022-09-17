@@ -17,10 +17,12 @@ jobs:
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
+      - setup_remote_docker:
+          version: 20.10.14
       - checkout
-      - run:
-          name: "Prepare API"
-          command: bash prepare_api.sh
+      #- run:
+      #    name: "Prepare API"
+      #    command: bash prepare_api.sh
       - run:
           name: Install Docker client
           command: apk add docker-cli
