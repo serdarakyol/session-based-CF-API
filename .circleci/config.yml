@@ -25,13 +25,14 @@ jobs:
           command: bash prepare_api.sh
 
       - run: docker build -t cf_api:0.0.1 .
-      - run: docker push cf_api:0.0.1
-      - run:
-          name: "Start Service and Check That it’s Running"
-          command: |
-            docker run -d --name cf_api cf_api
-            docker exec cf_api curl --retry 10 --retry-connrefused http://localhost:1234
+      #- run: docker push cf_api:0.0.1
+      #- run:
+      #    name: "Start Service and Check That it’s Running"
+      #    command: |
+      #      docker run -d --name cf_api cf_api
+      #      docker exec cf_api curl --retry 10 --retry-connrefused http://localhost:1234
 
+      - run: bash send_request.sh
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
