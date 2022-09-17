@@ -21,6 +21,9 @@ jobs:
       - run:
           name: "Prepare API"
           command: bash prepare_api.sh
+      - run:
+          name: Install Docker client
+          command: apk add docker-cli
       - run: docker build -t cf_api:0.0.1 .
       - run: docker push cf_api:0.0.1
       - run:
