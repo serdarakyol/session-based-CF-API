@@ -1,4 +1,12 @@
 #!/bin/bash
+#install pip and virtualenv
+if ! [ -x "$(command -v virtualenv)" ]; then
+    echo "Pip is installing"
+    sudo apt-get install python3-pip
+    echo "Virtualenv is installing"
+    sudo pip3 install virtualenv 
+fi
+
 # create and fill .env file
 touch .env
 cat << EOF > .env
