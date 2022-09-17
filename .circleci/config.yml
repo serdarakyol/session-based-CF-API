@@ -9,7 +9,7 @@ on:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  test:
+  default:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -30,17 +30,10 @@ jobs:
       - run: 
           name: "Run Docker"
           command: docker run -dp 1234:1234 cf_api:0.0.1
-      #- run: docker push cf_api:0.0.1
-      #- run:
-      #    name: "Start Service and Check That it’s Running"
-      #    command: |
-      #      docker run -d --name cf_api cf_api
-      #      docker exec cf_api curl --retry 10 --retry-connrefused http://localhost:1234
 
-      - run: bash send_request.sh
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   api-run:
     jobs:
-      - test
+      - default
