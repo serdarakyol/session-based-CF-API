@@ -24,7 +24,12 @@ jobs:
           name: "Prepare API"
           command: bash prepare_api.sh
 
-      - run: docker build -t cf_api:0.0.1 .
+      - run: 
+          name: "Build Docker"
+          command: docker build -t cf_api:0.0.1 .
+      - run: 
+          name: "Run Docker"
+          command: docker run -dp 1234:1234 cf_api:0.0.1
       #- run: docker push cf_api:0.0.1
       #- run:
       #    name: "Start Service and Check That it’s Running"
