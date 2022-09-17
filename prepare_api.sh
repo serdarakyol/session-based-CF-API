@@ -32,19 +32,5 @@ echo "Downloading products data to $data_folder/meta.json"
 gdown https://drive.google.com/uc?id=1tQezbs22O_-ZtzOhf6GUAs5noDPRdiFU -O $data_folder"/meta.json"
 
 #build and run docker
-systemctl start docker
 docker image build -t cf_api:0.0.1 .
 docker run -dp 1234:1234 cf_api:0.0.1
-
-# send request
-curl -X 'POST' \
-  'http://0.0.0.0:1234/api/collaborativefilter' \
-  -H 'accept: application/json' \
-  -H 'token: serdarakyol55@outlook.com' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "item": [
-    "SGKZB70023"
-  ],
-  "n_item": 3
-}'
