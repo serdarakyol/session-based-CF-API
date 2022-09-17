@@ -1,4 +1,12 @@
 #!/bin/bash
+#install pip and virtualenv
+if ! [ -x "$(command -v virtualenv)" ]; then
+    echo "Pip is installing"
+    sudo apt-get install python3-pip
+    echo "Virtualenv is installing"
+    sudo pip3 install virtualenv 
+fi
+
 # create and fill .env file
 touch .env
 cat << EOF > .env
@@ -22,3 +30,20 @@ echo "Downloading collaborative filter data to $data_folder/cf_data.pkl"
 gdown https://drive.google.com/uc?id=1iB4UmDc8Bcc4OhLbMdb-7ZflhRRFSBae -O $data_folder"/cf_data.pkl"
 echo "Downloading products data to $data_folder/meta.json"
 gdown https://drive.google.com/uc?id=1tQezbs22O_-ZtzOhf6GUAs5noDPRdiFU -O $data_folder"/meta.json"
+
+#build and run docker
+#docker image build -t cf_api:0.0.1 .
+#docker run -dp 1234:1234 cf_api:0.0.1
+#
+#curl -X 'POST' \
+#  'http://0.0.0.0:1234/api/collaborativefilter' \
+#  -H 'accept: application/json' \
+#  -H 'token: serdarakyol55@outlook.com' \
+#  -H 'Content-Type: application/json' \
+#  -d '{
+#  "item": [
+#    "SGKZB70023"
+#  ],
+#  "n_item": 3
+#}'
+#

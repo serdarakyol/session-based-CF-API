@@ -1,8 +1,8 @@
-numba==0.55.1
-numpy==1.21.6
-pandas==1.4.2
-loguru==0.6.0
-uvicorn==0.17.6
-fastapi==0.78.0
-scikit-learn==1.0.2
-gdown==4.4.0
+numba
+numpy
+pandas
+loguru
+uvicorn
+fastapi
+scikit-learn
+gdown

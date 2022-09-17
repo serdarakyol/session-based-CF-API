@@ -1,0 +1,39 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+name: CI
+on:
+  - push
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  test:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - setup_remote_docker:
+          version: 20.10.14
+      - checkout
+      - run:
+          name: "Prepare API"
+          command: bash prepare_api.sh
+
+      - run: 
+          name: "Build Docker"
+          command: docker build -t cf_api:0.0.1 .
+      - run: 
+          name: "Run Docker"
+          command: docker run -dp 1234:1234 cf_api:0.0.1
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  default:
+    jobs:
+      - test
