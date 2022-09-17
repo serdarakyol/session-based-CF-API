@@ -31,6 +31,10 @@ gdown https://drive.google.com/uc?id=1iB4UmDc8Bcc4OhLbMdb-7ZflhRRFSBae -O $data_
 echo "Downloading products data to $data_folder/meta.json"
 gdown https://drive.google.com/uc?id=1tQezbs22O_-ZtzOhf6GUAs5noDPRdiFU -O $data_folder"/meta.json"
 
+#build and run docker
+docker image build -t cf_api:0.0.1 .
+docker run -dp 1234:1234 cf_api:0.0.1
+
 # send request
 curl -X 'POST' \
   'http://0.0.0.0:1234/api/collaborativefilter' \
