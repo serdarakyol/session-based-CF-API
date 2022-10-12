@@ -1,4 +1,5 @@
 #!/bin/bash
+docker run -dp 1234:1234 cf_api:0.0.1
 # send request
 curl -X 'POST' \
   'http://localhost:1234/api/collaborativefilter' \
