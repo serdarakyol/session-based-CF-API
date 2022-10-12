@@ -31,8 +31,8 @@ jobs:
           name: "Run Docker"
           command: docker run -dp 1234:1234 cf_api:0.0.1
       - run:
-        name: "Send request"
-        command: bash send_request.sh
+          name: "Prepare API"
+          command: bash send_request.sh
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
