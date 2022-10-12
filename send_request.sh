@@ -1,7 +1,7 @@
 #!/bin/bash
 # send request
 curl -X 'POST' \
-  'http://0.0.0.0:1234/api/collaborativefilter' \
+  'http://localhost:1234/api/collaborativefilter' \
   -H 'accept: application/json' \
   -H 'token: serdarakyol55@outlook.com' \
   -H 'Content-Type: application/json' \
